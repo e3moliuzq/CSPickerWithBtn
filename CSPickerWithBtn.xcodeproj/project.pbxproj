@@ -15,6 +15,7 @@
 		18DB629E1CDC486E0093D69C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18DB629C1CDC486E0093D69C /* LaunchScreen.storyboard */; };
 		18DB62B11CDC499C0093D69C /* DatePickerWithBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DB62AE1CDC499C0093D69C /* DatePickerWithBtn.m */; };
 		18DB62BA1CDC6A410093D69C /* PickerViewWithBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DB62B91CDC6A410093D69C /* PickerViewWithBtn.m */; };
+		18DB62BD1CDC92D30093D69C /* ContactPickerWithBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DB62BC1CDC92D30093D69C /* ContactPickerWithBtn.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		18DB62AE1CDC499C0093D69C /* DatePickerWithBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerWithBtn.m; sourceTree = "<group>"; };
 		18DB62B81CDC6A410093D69C /* PickerViewWithBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PickerViewWithBtn.h; sourceTree = "<group>"; };
 		18DB62B91CDC6A410093D69C /* PickerViewWithBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PickerViewWithBtn.m; sourceTree = "<group>"; };
+		18DB62BB1CDC92D30093D69C /* ContactPickerWithBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactPickerWithBtn.h; sourceTree = "<group>"; };
+		18DB62BC1CDC92D30093D69C /* ContactPickerWithBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactPickerWithBtn.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +96,8 @@
 				18DB62B91CDC6A410093D69C /* PickerViewWithBtn.m */,
 				18DB62AD1CDC499C0093D69C /* DatePickerWithBtn.h */,
 				18DB62AE1CDC499C0093D69C /* DatePickerWithBtn.m */,
+				18DB62BB1CDC92D30093D69C /* ContactPickerWithBtn.h */,
+				18DB62BC1CDC92D30093D69C /* ContactPickerWithBtn.m */,
 			);
 			path = PickerView;
 			sourceTree = SOURCE_ROOT;
@@ -170,6 +175,7 @@
 				18DB62961CDC486E0093D69C /* ViewController.m in Sources */,
 				18DB62931CDC486E0093D69C /* AppDelegate.m in Sources */,
 				18DB62B11CDC499C0093D69C /* DatePickerWithBtn.m in Sources */,
+				18DB62BD1CDC92D30093D69C /* ContactPickerWithBtn.m in Sources */,
 				18DB62BA1CDC6A410093D69C /* PickerViewWithBtn.m in Sources */,
 				18DB62901CDC486E0093D69C /* main.m in Sources */,
 			);

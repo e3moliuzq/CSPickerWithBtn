@@ -11,6 +11,7 @@
 @interface ViewController () {
     NSArray *test_arr0;
     NSArray *test_arr1;
+    NSArray *contact_test_arr;
 }
 
 @end
@@ -51,6 +52,66 @@
     [btn1 addTarget:self action:@selector(pickerviewTouched) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn1];
     
+    
+    choose_contact[0] = 0;
+    choose_contact[1] = 0;
+    choose_contact[2] = 0;
+    
+    
+    
+    contact_test_arr = @[
+                         @{@"name":@"数据0",@"array":@[
+                                   @{@"name":@"活动00", @"array":@[
+                                             @{@"name":@"选项000"},@{@"name":@"选项001"},@{@"name":@"选项002"}
+                                             ]},
+                                   @{@"name":@"活动01", @"array":@[
+                                             @{@"name":@"选项010"},@{@"name":@"选项011"},@{@"name":@"选项012"},@{@"name":@"选项013"}
+                                             ]},
+                                   @{@"name":@"活动02", @"array":@[
+                                             @{@"name":@"选项020"},@{@"name":@"选项021"}
+                                             ]},
+                                   ]},
+                         @{@"name":@"数据1",@"array":@[
+                                   @{@"name":@"活动10", @"array":@[
+                                             @{@"name":@"选项100"},@{@"name":@"选项101"},@{@"name":@"选项102"}
+                                             ]},
+                                   @{@"name":@"活动11", @"array":@[
+                                             @{@"name":@"选项110"},@{@"name":@"选项111"}
+                                             ]},
+                                   @{@"name":@"活动12", @"array":@[
+                                             @{@"name":@"选项120"},@{@"name":@"选项121"},@{@"name":@"选项122"}
+                                             ]},
+                                   @{@"name":@"活动13", @"array":@[
+                                             @{@"name":@"选项130"},@{@"name":@"选项131"},@{@"name":@"选项132"},@{@"name":@"选项133"},@{@"name":@"选项134"}
+                                             ]},
+                                   ]},
+                         
+                         @{@"name":@"数据2",@"array":@[
+                                   @{@"name":@"活动20", @"array":@[
+                                             @{@"name":@"选项200"},@{@"name":@"选项201"}
+                                             ]},
+                                   @{@"name":@"活动21", @"array":@[
+                                             @{@"name":@"选项210"},@{@"name":@"选项211"},@{@"name":@"选项202"}
+                                             ]},
+                                   ]},
+                         ];
+    
+    NSDictionary *dict0 = [contact_test_arr objectAtIndex:choose_contact[0]];
+    NSString *name0 = [dict0 objectForKey:@"name"];
+    NSArray *arr1 = [dict0 objectForKey:@"array"];
+    NSDictionary *dict1 = [arr1 objectAtIndex:choose_contact[1]];
+    NSString *name1 = [dict1 objectForKey:@"name"];
+    NSArray *arr2 = [dict1 objectForKey:@"array"];
+    NSDictionary *dict2 = [arr2 objectAtIndex:choose_contact[2]];
+    NSString *name2 = [dict2 objectForKey:@"name"];
+    btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn2 setFrame:CGRectMake(30, winsize.height-300, 230, 80)];
+    [btn2 setTitle:[NSString stringWithFormat:@"show contact picker with button:%@-%@-%@",name0,name1,name2] forState:UIControlStateNormal];
+    btn2.titleLabel.numberOfLines = 0;
+    [btn2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [btn2 setBackgroundColor:[UIColor redColor]];
+    [btn2 addTarget:self action:@selector(contactpickerTouched) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn2];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,7 +138,16 @@
         [date_picker_view setMinYear:1990];
         [self.view addSubview:date_picker_view];
         [date_picker_view showView];
+        
+        //test
+//        [self performSelector:@selector(timer) withObject:nil afterDelay:3.f];
     }
+}
+
+- (void)timer {
+    NSDate *date = [DatePickerWithBtn dateFromYear:2000 month:3 day:3];
+    [date_picker_view setMaxDate:date];
+    [date_picker_view setMinYear:1999];
 }
 
 - (void)pickerviewTouched {
@@ -99,7 +169,25 @@
         [picker_view setBtnLabelColor:[UIColor redColor] highlightedColor:[UIColor darkGrayColor]];
         [self.view addSubview:picker_view];
         [picker_view showView];
+    }
+}
+
+- (void)contactpickerTouched {
+    if (contact_picker) {
+        if ([contact_picker viewIsInAction]) {
+            return;
+        }
         
+        [contact_picker hideView];
+    }
+    else {
+        CGSize winsize = [[UIScreen mainScreen] bounds].size;
+        
+        NSArray *choose_indexs = [NSArray arrayWithObjects: [NSString stringWithFormat:@"%d",choose_contact[0]], [NSString stringWithFormat:@"%d",choose_contact[1]], [NSString stringWithFormat:@"%d",choose_contact[2]], nil];
+        contact_picker = [[ContactPickerWithBtn alloc] initWithFrame:CGRectMake(0, 0, winsize.width, winsize.height) chooseIndexs:choose_indexs infoArray:contact_test_arr];
+        contact_picker.delegate = self;
+        [self.view addSubview:contact_picker];
+        [contact_picker showView];
     }
 }
 
@@ -135,6 +223,33 @@
     [btn1 setTitle:[NSString stringWithFormat:@"show picker view with button:%@-%@",[test_arr0 objectAtIndex:choose_index[0]],[test_arr1 objectAtIndex:choose_index[1]]] forState:UIControlStateNormal];
     
     [picker_view hideView];
+}
+
+
+#pragma mark - contactpickerbtn delegate
+- (void)contactPickerWithBtnClose:(id)sender {
+    [contact_picker removeFromSuperview];
+    contact_picker = nil;
+}
+
+- (void)contactPickerWithBtnSure:(id)sender chooseIndexs:(NSArray *)indexs {
+    choose_contact[0] = [[indexs objectAtIndex:0] intValue];
+    choose_contact[1] = [[indexs objectAtIndex:1] intValue];
+    choose_contact[2] = [[indexs objectAtIndex:2] intValue];
+    
+    NSDictionary *dict0 = [contact_test_arr objectAtIndex:choose_contact[0]];
+    NSString *name0 = [dict0 objectForKey:@"name"];
+    NSArray *arr1 = [dict0 objectForKey:@"array"];
+    NSDictionary *dict1 = [arr1 objectAtIndex:choose_contact[1]];
+    NSString *name1 = [dict1 objectForKey:@"name"];
+    NSArray *arr2 = [dict1 objectForKey:@"array"];
+    NSDictionary *dict2 = [arr2 objectAtIndex:choose_contact[2]];
+    NSString *name2 = [dict2 objectForKey:@"name"];
+    
+    [btn2 setTitle:[NSString stringWithFormat:@"show contact picker with button:%@-%@-%@",name0,name1,name2] forState:UIControlStateNormal];
+    
+    
+    [contact_picker hideView];
 }
 
 
