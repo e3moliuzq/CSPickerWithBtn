@@ -41,8 +41,9 @@
 - (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs areaArray:(NSArray*)array;
 
 - (void)setCellBgColor:(UIColor*)color;//设定选择框的背景颜色
-- (void)setBtnBgColor:(UIColor*)color;//设定确定按钮的颜色
 - (void)setCellLabelColor:(UIColor*)color;//设定选项文字的颜色
+- (void)setBtnBgColor:(UIColor*)color;//设定确定按钮的颜色
+- (void)setBtnLabelColor:(UIColor*)color highlightedColor:(UIColor*)h_color;//设定确定按钮文字的颜色，highlightedColor可不填
 
 - (void)showView;//执行出现动画，初始化后需要执行
 - (void)hideView;//执行隐藏动画

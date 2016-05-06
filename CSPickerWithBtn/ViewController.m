@@ -96,6 +96,7 @@
         [picker_view setCellBgColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.9]];
         [picker_view setBtnBgColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.9]];
         [picker_view setCellLabelColor:[UIColor whiteColor]];
+        [picker_view setBtnLabelColor:[UIColor redColor] highlightedColor:[UIColor darkGrayColor]];
         [self.view addSubview:picker_view];
         [picker_view showView];
         

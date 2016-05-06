@@ -56,6 +56,13 @@
     }
 }
 
+- (void)setBtnLabelColor:(UIColor*)color highlightedColor:(UIColor*)h_color {
+    if (color) {
+        [sure_btn setTitleColor:color forState:UIControlStateNormal];
+    }
+    [sure_btn setTitleColor:h_color forState:UIControlStateHighlighted];
+}
+
 - (void)initShowView {
     show_view = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height, self.frame.size.width, 0)];
     [show_view setBackgroundColor:[UIColor clearColor]];

@@ -54,8 +54,9 @@ typedef enum : NSUInteger {
 - (id)initWithFrame:(CGRect)frame chooseDate:(NSDate*)chooseDate mode:(int)mode;
 
 - (void)setCellBgColor:(UIColor*)color;//设定选择框的背景颜色
-- (void)setBtnBgColor:(UIColor*)color;//设定确定按钮的颜色
 - (void)setCellLabelColor:(UIColor*)color;//设定选项文字的颜色
+- (void)setBtnBgColor:(UIColor*)color;//设定确定按钮的颜色
+- (void)setBtnLabelColor:(UIColor*)color highlightedColor:(UIColor*)h_color;//设定确定按钮文字的颜色，highlightedColor可不填
 
 - (void)setMaxDate:(NSDate*)date;//设定最大日期
 - (void)setMinYear:(int)minYear;//设定最小年份，最小月和日默认为1月1日

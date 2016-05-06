@@ -56,6 +56,13 @@
     }
 }
 
+- (void)setBtnLabelColor:(UIColor*)color highlightedColor:(UIColor*)h_color {
+    if (color) {
+        [sure_btn setTitleColor:color forState:UIControlStateNormal];
+    }
+    [sure_btn setTitleColor:h_color forState:UIControlStateHighlighted];
+}
+
 - (void)setMaxDate:(NSDate*)date {
     if (date) {
         max_date = date;
