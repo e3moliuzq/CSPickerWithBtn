@@ -225,7 +225,7 @@
     for (int i=(int)component+1; i<picker_choose_indexs.count; i++) {
         [picker_view reloadComponent:i];
         [picker_choose_indexs replaceObjectAtIndex:i withObject:[NSString stringWithFormat:@"%d",0]];
-        [picker_view selectRow:0 inComponent:i animated:NO];
+        [picker_view selectRow:0 inComponent:i animated:YES];
     }
 }
 
