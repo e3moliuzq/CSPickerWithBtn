@@ -15,13 +15,6 @@ typedef enum : NSUInteger {
 } datePickerMode;
 
 
-@protocol datePickerWithBtnDelegate <NSObject>
-
-@optional
-- (void)datePickerWithBtnSure:(id)sender chooseDate:(NSDate*)date;
-- (void)datePickerWithBtnClose:(id)sender;
-@end
-
 @interface DatePickerWithBtn : UIView <UIPickerViewDataSource,UIPickerViewDelegate> {
     UIPickerView *picker_view;
     UIButton *sure_btn;
@@ -39,7 +32,9 @@ typedef enum : NSUInteger {
     UIView *show_view;
     BOOL isInAction;
 }
-@property (nonatomic,weak) id<datePickerWithBtnDelegate> delegate;
+
+@property (readwrite, copy) void (^close) (id sender);//结束hideView动画时
+@property (readwrite, copy) void (^action) (NSDate* date, id sender);//点击选项时
 
 /**
  带确定按钮的datepicker，可显示年月日或年月
@@ -61,7 +56,7 @@ typedef enum : NSUInteger {
 - (void)setMaxDate:(NSDate*)date;//设定最大日期
 - (void)setMinYear:(int)minYear;//设定最小年份，最小月和日默认为1月1日
 
-- (void)showView;//执行出现动画，初始化后需要执行
+- (void)showView:(void (^) (NSDate *date, id sender))action close:(void (^) (id sender))close;//执行出现动画，初始化后需要执行
 - (void)hideView;//执行隐藏动画
 - (BOOL)viewIsInAction;//判断当前是否在动画过程中
 

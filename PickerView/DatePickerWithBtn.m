@@ -164,9 +164,9 @@
 }
 
 - (void)sureBtnTouched:(id)sender {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(datePickerWithBtnSure:chooseDate:)]) {
+    if (self.action) {
         NSDate *date = [DatePickerWithBtn dateFromYear:choose_year_index+min_year month:choose_month_index+1 day:choose_day_index+1];
-        [self.delegate datePickerWithBtnSure:self chooseDate:date];
+        self.action(date, self);
     }
 }
 
@@ -178,10 +178,13 @@
     [self hideView];
 }
 
-- (void)showView {
+- (void)showView:(void (^)(NSDate *, id))action close:(void (^)(id))close {
     if (isInAction) {
         return;
     }
+    self.action = action;
+    self.close = close;
+    
     isInAction = YES;
     
     [UIView animateWithDuration:0.3 animations:^{
@@ -211,8 +214,8 @@
         if (finished) {
             isInAction = NO;
             
-            if (self.delegate && [self.delegate respondsToSelector:@selector(datePickerWithBtnClose:)]) {
-                [self.delegate datePickerWithBtnClose:self];
+            if (self.close) {
+                self.close(self);
             }
         }
     }];

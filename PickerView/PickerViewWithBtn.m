@@ -105,8 +105,8 @@
 }
 
 - (void)sureBtnTouched:(id)sender {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(pickerWithBtnSure:chooseIndexs:)]) {
-        [self.delegate pickerWithBtnSure:self chooseIndexs:picker_choose_indexs];
+    if (self.action) {
+        self.action(picker_choose_indexs, self);
     }
 }
 
@@ -118,10 +118,13 @@
     [self hideView];
 }
 
-- (void)showView {
+- (void)showView:(void (^)(NSArray *, id))action close:(void (^)(id))close {
     if (isInAction) {
         return;
     }
+    self.action = action;
+    self.close = close;
+    
     isInAction = YES;
     
     [UIView animateWithDuration:0.3 animations:^{
@@ -151,8 +154,8 @@
         if (finished) {
             isInAction = NO;
             
-            if (self.delegate && [self.delegate respondsToSelector:@selector(pickerWithBtnClose:)]) {
-                [self.delegate pickerWithBtnClose:self];
+            if (self.close) {
+                self.close(self);
             }
         }
     }];

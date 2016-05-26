@@ -8,12 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol ContactPickerWithBtnDelegate <NSObject>
-
-@optional
-- (void)contactPickerWithBtnSure:(id)sender chooseIndexs:(NSArray*)indexs;
-- (void)contactPickerWithBtnClose:(id)sender;
-@end
 
 @interface ContactPickerWithBtn : UIView <UIPickerViewDelegate,UIPickerViewDataSource> {
     UIPickerView *picker_view;
@@ -26,7 +20,9 @@
     NSMutableArray *picker_choose_indexs;
     NSArray *picker_array;
 }
-@property (nonatomic,weak) id<ContactPickerWithBtnDelegate> delegate;
+
+@property (readwrite, copy) void (^close) (id sender);//结束hideView动画时
+@property (readwrite, copy) void (^action) (NSArray* indexs, id sender);//点击选项时
 
 /**
  带确定按钮的多层级picker，可多项选择，多项选择之间相互关联
@@ -45,7 +41,7 @@
 - (void)setBtnBgColor:(UIColor*)color;//设定确定按钮的颜色
 - (void)setBtnLabelColor:(UIColor*)color highlightedColor:(UIColor*)h_color;//设定确定按钮文字的颜色，highlightedColor可不填
 
-- (void)showView;//执行出现动画，初始化后需要执行
+- (void)showView:(void (^) (NSArray *indexs, id sender))action close:(void (^) (id sender))close;//执行出现动画，初始化后需要执行
 - (void)hideView;//执行隐藏动画
 - (BOOL)viewIsInAction;//判断当前是否在动画过程中
 

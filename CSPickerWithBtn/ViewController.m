@@ -132,22 +132,25 @@
         CGSize winsize = [[UIScreen mainScreen] bounds].size;
         
         date_picker_view = [[DatePickerWithBtn alloc] initWithFrame:CGRectMake(0, 0, winsize.width, winsize.height) chooseDate:choose_date mode:datePickerModeYMD];
-        date_picker_view.delegate = self;
         NSDate *date = [DatePickerWithBtn dateFromYear:2016 month:12 day:12];
         [date_picker_view setMaxDate:date];
         [date_picker_view setMinYear:1990];
         [self.view addSubview:date_picker_view];
-        [date_picker_view showView];
-        
-        //test
-//        [self performSelector:@selector(timer) withObject:nil afterDelay:3.f];
+        [date_picker_view showView:^(NSDate *date, id sender) {
+            choose_date = date;
+            
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+            NSString *dateStr = [dateFormatter stringFromDate:choose_date];
+            
+            [btn0 setTitle:[NSString stringWithFormat:@"show date picker with button:%@",dateStr] forState:UIControlStateNormal];
+            
+            [date_picker_view hideView];
+        } close:^(id sender) {
+            [date_picker_view removeFromSuperview];
+            date_picker_view = nil;
+        }];
     }
-}
-
-- (void)timer {
-    NSDate *date = [DatePickerWithBtn dateFromYear:2000 month:3 day:3];
-    [date_picker_view setMaxDate:date];
-    [date_picker_view setMinYear:1999];
 }
 
 - (void)pickerviewTouched {
@@ -162,13 +165,22 @@
         CGSize winsize = [[UIScreen mainScreen] bounds].size;
         
         picker_view = [[PickerViewWithBtn alloc] initWithFrame:CGRectMake(0, 0, winsize.width, winsize.height) chooseIndexs:[NSArray arrayWithObjects: [NSString stringWithFormat:@"%d",choose_index[0]], [NSString stringWithFormat:@"%d",choose_index[1]], nil] areaArray:[NSArray arrayWithObjects: test_arr0, test_arr1, nil]];
-        picker_view.delegate = self;
         [picker_view setCellBgColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.9]];
         [picker_view setBtnBgColor:[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.9]];
         [picker_view setCellLabelColor:[UIColor whiteColor]];
         [picker_view setBtnLabelColor:[UIColor redColor] highlightedColor:[UIColor darkGrayColor]];
         [self.view addSubview:picker_view];
-        [picker_view showView];
+        [picker_view showView:^(NSArray *indexs, id sender) {
+            choose_index[0] = [[indexs objectAtIndex:0] intValue];
+            choose_index[1] = [[indexs objectAtIndex:1] intValue];
+            
+            [btn1 setTitle:[NSString stringWithFormat:@"show picker view with button:%@-%@",[test_arr0 objectAtIndex:choose_index[0]],[test_arr1 objectAtIndex:choose_index[1]]] forState:UIControlStateNormal];
+            
+            [picker_view hideView];
+        } close:^(id sender) {
+            [picker_view removeFromSuperview];
+            picker_view = nil;
+        }];
     }
 }
 
@@ -185,71 +197,30 @@
         
         NSArray *choose_indexs = [NSArray arrayWithObjects: [NSString stringWithFormat:@"%d",choose_contact[0]], [NSString stringWithFormat:@"%d",choose_contact[1]], [NSString stringWithFormat:@"%d",choose_contact[2]], nil];
         contact_picker = [[ContactPickerWithBtn alloc] initWithFrame:CGRectMake(0, 0, winsize.width, winsize.height) chooseIndexs:choose_indexs infoArray:contact_test_arr];
-        contact_picker.delegate = self;
         [self.view addSubview:contact_picker];
-        [contact_picker showView];
+        [contact_picker showView:^(NSArray *indexs, id sender) {
+            choose_contact[0] = [[indexs objectAtIndex:0] intValue];
+            choose_contact[1] = [[indexs objectAtIndex:1] intValue];
+            choose_contact[2] = [[indexs objectAtIndex:2] intValue];
+            
+            NSDictionary *dict0 = [contact_test_arr objectAtIndex:choose_contact[0]];
+            NSString *name0 = [dict0 objectForKey:@"name"];
+            NSArray *arr1 = [dict0 objectForKey:@"array"];
+            NSDictionary *dict1 = [arr1 objectAtIndex:choose_contact[1]];
+            NSString *name1 = [dict1 objectForKey:@"name"];
+            NSArray *arr2 = [dict1 objectForKey:@"array"];
+            NSDictionary *dict2 = [arr2 objectAtIndex:choose_contact[2]];
+            NSString *name2 = [dict2 objectForKey:@"name"];
+            
+            [btn2 setTitle:[NSString stringWithFormat:@"show contact picker with button:%@-%@-%@",name0,name1,name2] forState:UIControlStateNormal];
+            
+            
+            [contact_picker hideView];
+        } close:^(id sender) {
+            [contact_picker removeFromSuperview];
+            contact_picker = nil;
+        }];
     }
-}
-
-#pragma mark - datepicker delegate
-- (void)datePickerWithBtnClose:(id)sender {
-    [date_picker_view removeFromSuperview];
-    date_picker_view = nil;
-}
-
-- (void)datePickerWithBtnSure:(id)sender chooseDate:(NSDate *)date {
-    choose_date = date;
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *dateStr = [dateFormatter stringFromDate:choose_date];
-    
-    [btn0 setTitle:[NSString stringWithFormat:@"show date picker with button:%@",dateStr] forState:UIControlStateNormal];
-    
-    [date_picker_view hideView];
-}
-
-
-#pragma mark - pickerbtn delegate
-- (void)pickerWithBtnClose:(id)sender {
-    [picker_view removeFromSuperview];
-    picker_view = nil;
-}
-
-- (void)pickerWithBtnSure:(id)sender chooseIndexs:(NSArray *)indexs {
-    choose_index[0] = [[indexs objectAtIndex:0] intValue];
-    choose_index[1] = [[indexs objectAtIndex:1] intValue];
-    
-    [btn1 setTitle:[NSString stringWithFormat:@"show picker view with button:%@-%@",[test_arr0 objectAtIndex:choose_index[0]],[test_arr1 objectAtIndex:choose_index[1]]] forState:UIControlStateNormal];
-    
-    [picker_view hideView];
-}
-
-
-#pragma mark - contactpickerbtn delegate
-- (void)contactPickerWithBtnClose:(id)sender {
-    [contact_picker removeFromSuperview];
-    contact_picker = nil;
-}
-
-- (void)contactPickerWithBtnSure:(id)sender chooseIndexs:(NSArray *)indexs {
-    choose_contact[0] = [[indexs objectAtIndex:0] intValue];
-    choose_contact[1] = [[indexs objectAtIndex:1] intValue];
-    choose_contact[2] = [[indexs objectAtIndex:2] intValue];
-    
-    NSDictionary *dict0 = [contact_test_arr objectAtIndex:choose_contact[0]];
-    NSString *name0 = [dict0 objectForKey:@"name"];
-    NSArray *arr1 = [dict0 objectForKey:@"array"];
-    NSDictionary *dict1 = [arr1 objectAtIndex:choose_contact[1]];
-    NSString *name1 = [dict1 objectForKey:@"name"];
-    NSArray *arr2 = [dict1 objectForKey:@"array"];
-    NSDictionary *dict2 = [arr2 objectAtIndex:choose_contact[2]];
-    NSString *name2 = [dict2 objectForKey:@"name"];
-    
-    [btn2 setTitle:[NSString stringWithFormat:@"show contact picker with button:%@-%@-%@",name0,name1,name2] forState:UIControlStateNormal];
-    
-    
-    [contact_picker hideView];
 }
 
 

@@ -11,7 +11,7 @@
 #import "PickerViewWithBtn.h"
 #import "ContactPickerWithBtn.h"
 
-@interface ViewController : UIViewController <datePickerWithBtnDelegate,PickerViewWithBtnDelegate,ContactPickerWithBtnDelegate> {
+@interface ViewController : UIViewController {
     DatePickerWithBtn *date_picker_view;
     NSDate *choose_date;
     PickerViewWithBtn *picker_view;
