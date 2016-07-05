@@ -67,8 +67,6 @@
     if (date) {
         max_date = date;
         
-        [picker_view reloadAllComponents];
-        
         int year = (int)[DatePickerWithBtn year:max_date];
         int month = (int)[DatePickerWithBtn month:max_date];
         
@@ -97,6 +95,11 @@
         }
         
         [picker_view reloadAllComponents];
+        [picker_view selectRow:choose_year_index inComponent:0 animated:NO];
+        [picker_view selectRow:choose_month_index inComponent:1 animated:NO];
+        if (picker_mode == datePickerModeYMD) {
+            [picker_view selectRow:choose_day_index inComponent:2 animated:NO];
+        }
     }
 }
 
@@ -140,7 +143,7 @@
         NSDate *date = [DatePickerWithBtn dateFromYear:choose_year_index+min_year month:choose_month_index+1 day:1];
         NSUInteger number = [DatePickerWithBtn numberOfDaysInCurrentMonth:date];
         if (choose_day_index > number) {
-            choose_day_index = (int)number;
+            choose_day_index = (int)number-1;
         }
         [picker_view selectRow:choose_day_index inComponent:2 animated:NO];
     }
