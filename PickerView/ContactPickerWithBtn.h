@@ -12,6 +12,9 @@
 @interface ContactPickerWithBtn : UIView <UIPickerViewDelegate,UIPickerViewDataSource> {
     UIPickerView *picker_view;
     UIButton *sure_btn;
+    UIButton *cancel_btn;
+    UIView *btn_menu;//btn_mode==1使用
+    int btn_mode;
     UIColor *label_color;
     
     UIView *show_view;
@@ -33,8 +36,10 @@
  frame：决定遮罩的位置大小和选择框的宽度
  chooseIndexs：传入int转NSString的数组，决定每一项选择的row，同时确定层级数，故不能传空，且chooseIndexs.count需要为层级数
  areaArray：传入数据，array中为数组，数组为dict，key：name-当前级显示内容，array-下一级的数组
+ btn_mode:为1是按钮在选择框上方样式，为0是按钮在选择框下方样式，默认为0
  */
 - (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs infoArray:(NSArray*)array;
+- (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs infoArray:(NSArray*)array btnMode:(int)btnMode;
 
 - (void)setCellBgColor:(UIColor*)color;//设定选择框的背景颜色
 - (void)setCellLabelColor:(UIColor*)color;//设定选项文字的颜色

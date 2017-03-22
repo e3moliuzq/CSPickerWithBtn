@@ -131,7 +131,7 @@
     else {
         CGSize winsize = [[UIScreen mainScreen] bounds].size;
         
-        date_picker_view = [[DatePickerWithBtn alloc] initWithFrame:CGRectMake(0, 0, winsize.width, winsize.height) chooseDate:choose_date mode:datePickerModeYMD];
+        date_picker_view = [[DatePickerWithBtn alloc] initWithFrame:CGRectMake(0, 0, winsize.width, winsize.height) chooseDate:choose_date mode:datePickerModeYMD btnMode:1];
         NSDate *date = [DatePickerWithBtn dateFromYear:2016 month:12 day:12];
         [date_picker_view setMaxDate:date];
         [date_picker_view setMinYear:1990];
@@ -196,7 +196,7 @@
         CGSize winsize = [[UIScreen mainScreen] bounds].size;
         
         NSArray *choose_indexs = [NSArray arrayWithObjects: [NSString stringWithFormat:@"%d",choose_contact[0]], [NSString stringWithFormat:@"%d",choose_contact[1]], [NSString stringWithFormat:@"%d",choose_contact[2]], nil];
-        contact_picker = [[ContactPickerWithBtn alloc] initWithFrame:CGRectMake(0, 0, winsize.width, winsize.height) chooseIndexs:choose_indexs infoArray:contact_test_arr];
+        contact_picker = [[ContactPickerWithBtn alloc] initWithFrame:CGRectMake(0, 0, winsize.width, winsize.height) chooseIndexs:choose_indexs infoArray:contact_test_arr btnMode:1];
         [self.view addSubview:contact_picker];
         [contact_picker showView:^(NSArray *indexs, id sender) {
             choose_contact[0] = [[indexs objectAtIndex:0] intValue];

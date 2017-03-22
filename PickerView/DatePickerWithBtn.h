@@ -18,6 +18,9 @@ typedef enum : NSUInteger {
 @interface DatePickerWithBtn : UIView <UIPickerViewDataSource,UIPickerViewDelegate> {
     UIPickerView *picker_view;
     UIButton *sure_btn;
+    UIButton *cancel_btn;
+    UIView *btn_menu;//btn_mode==1使用
+    int btn_mode;
     UIColor *label_color;
     
     int choose_year_index;
@@ -45,8 +48,10 @@ typedef enum : NSUInteger {
  frame：决定遮罩的位置大小和选择框的宽度
  chooseDate：当前选择的日期
  mode：datePickerModeYMD为显示年月日，datePickerModeYM为显示年月
+ btn_mode:为1是按钮在选择框上方样式，为0是按钮在选择框下方样式，默认为0
  */
 - (id)initWithFrame:(CGRect)frame chooseDate:(NSDate*)chooseDate mode:(int)mode;
+- (id)initWithFrame:(CGRect)frame chooseDate:(NSDate*)chooseDate mode:(int)mode btnMode:(int)btnMode;
 
 - (void)setCellBgColor:(UIColor*)color;//设定选择框的背景颜色
 - (void)setCellLabelColor:(UIColor*)color;//设定选项文字的颜色

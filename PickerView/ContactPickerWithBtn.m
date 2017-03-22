@@ -10,12 +10,18 @@
 
 @implementation ContactPickerWithBtn
 
+
 - (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray *)chooseIndexs infoArray:(NSArray *)array {
+    return [self initWithFrame:frame chooseIndexs:chooseIndexs infoArray:array btnMode:0];
+}
+
+- (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray *)chooseIndexs infoArray:(NSArray *)array btnMode:(int)btnMode {
     
     self = [super initWithFrame:frame];
     if (self) {
         self.clipsToBounds = YES;
         
+        btn_mode = btnMode;
         isInAction = NO;
         picker_choose_indexs = [[NSMutableArray alloc] initWithArray:chooseIndexs];
         
@@ -44,8 +50,15 @@
 }
 
 - (void)setBtnBgColor:(UIColor*)color {
-    if (sure_btn) {
-        [sure_btn setBackgroundColor:color];
+    if (btn_mode == 1) {
+        if (btn_menu) {
+            [btn_menu setBackgroundColor:color];
+        }
+    }
+    else {
+        if (sure_btn) {
+            [sure_btn setBackgroundColor:color];
+        }
     }
 }
 
@@ -59,8 +72,10 @@
 - (void)setBtnLabelColor:(UIColor*)color highlightedColor:(UIColor*)h_color {
     if (color) {
         [sure_btn setTitleColor:color forState:UIControlStateNormal];
+        [cancel_btn setTitleColor:color forState:UIControlStateNormal];
     }
     [sure_btn setTitleColor:h_color forState:UIControlStateHighlighted];
+    [cancel_btn setTitleColor:h_color forState:UIControlStateHighlighted];
 }
 
 - (void)initShowView {
@@ -77,27 +92,55 @@
     [picker_view setDelegate:self];
     [picker_view setShowsSelectionIndicator:YES];//选择框，貌似不能去除
     [picker_view setBackgroundColor:[UIColor whiteColor]];
-    
-    height = picker_view.frame.size.height+5;
-    
     [show_view addSubview:picker_view];
+    
+    if (btn_mode == 1) {
+        [picker_view setFrame:CGRectMake(0, 40, show_view.frame.size.width, picker_view.frame.size.height)];
+        height += picker_view.frame.size.height;
+        
+        btn_menu = [[UIView alloc] initWithFrame:CGRectMake(0, 0, show_view.frame.size.width, 40)];
+        [btn_menu setBackgroundColor:[UIColor whiteColor]];
+        [show_view addSubview:btn_menu];
+        
+        sure_btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [sure_btn setFrame:CGRectMake(show_view.frame.size.width-90, 0, 90, 40)];
+        [sure_btn setTitle:@"确定" forState:UIControlStateNormal];
+        [sure_btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [sure_btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+        [sure_btn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        [sure_btn setBackgroundColor:[UIColor clearColor]];
+        [sure_btn addTarget:self action:@selector(sureBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
+        [btn_menu addSubview:sure_btn];
+        
+        cancel_btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancel_btn setFrame:CGRectMake(0, 0, 90, 40)];
+        [cancel_btn setTitle:@"取消" forState:UIControlStateNormal];
+        [cancel_btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [cancel_btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+        [cancel_btn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        [cancel_btn setBackgroundColor:[UIColor clearColor]];
+        [cancel_btn addTarget:self action:@selector(closeBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
+        [btn_menu addSubview:cancel_btn];
+    }
+    else {
+        [picker_view setFrame:CGRectMake(0, 0, show_view.frame.size.width, picker_view.frame.size.height)];
+        height = picker_view.frame.size.height+5;
+        
+        sure_btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [sure_btn setFrame:CGRectMake(0, height, show_view.frame.size.width, 44)];
+        [sure_btn setTitle:@"确定" forState:UIControlStateNormal];
+        [sure_btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [sure_btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+        [sure_btn.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        [sure_btn setBackgroundColor:[UIColor colorWithRed:1.f/255.f green:185.f/255.f blue:97.f/255.f alpha:1]];
+        [sure_btn addTarget:self action:@selector(sureBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
+        [show_view addSubview:sure_btn];
+    }
     
     for (int i=0; i<picker_choose_indexs.count; i++) {
         int index = [[picker_choose_indexs objectAtIndex:i] intValue];
         [picker_view selectRow:index inComponent:i animated:YES];
     }
-    
-    
-    sure_btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [sure_btn setFrame:CGRectMake(0, height, show_view.frame.size.width, 44)];
-    [sure_btn setTitle:@"确定" forState:UIControlStateNormal];
-    [sure_btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [sure_btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
-    [sure_btn.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
-    [sure_btn setBackgroundColor:[UIColor colorWithRed:1.f/255.f green:185.f/255.f blue:97.f/255.f alpha:1]];
-    [sure_btn addTarget:self action:@selector(sureBtnTouched:) forControlEvents:UIControlEventTouchUpInside];
-    [show_view addSubview:sure_btn];
-    
     
     CGRect frame = show_view.frame;
     frame.size.height = height + sure_btn.frame.size.height;
