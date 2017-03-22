@@ -11,10 +11,10 @@
 @implementation PickerViewWithBtn
 
 - (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs areaArray:(NSArray *)array {
-    return [self initWithFrame:frame chooseIndexs:chooseIndexs areaArray:array btnMode:0];
+    return [self initWithFrame:frame chooseIndexs:chooseIndexs areaArray:array btnMode:0 pickerloop:NO];
 }
 
-- (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs areaArray:(NSArray *)array btnMode:(int)btnMode {
+- (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs areaArray:(NSArray *)array btnMode:(int)btnMode pickerloop:(BOOL)isloop {
     
     self = [super initWithFrame:frame];
     if (self) {
@@ -22,9 +22,26 @@
         
         btn_mode = btnMode;
         isInAction = NO;
+        is_loop = isloop;
+        max_MoM = 0;
         picker_choose_indexs = [[NSMutableArray alloc] initWithArray:chooseIndexs];
         
         picker_array = [[NSArray alloc] initWithArray:array];
+        
+        //循环模式计算倍数，达到效果
+        if (isloop) {
+            max_MoM = 20;
+            for (int i=0; i<picker_array.count; i++) {
+                NSArray *arr = [picker_array objectAtIndex:i];
+                int max = 10000/arr.count;
+                if (max < max_MoM) {
+                    max_MoM = max;
+                }
+            }
+            if (max_MoM <= 1) {
+                max_MoM = 2;
+            }
+        }
         
         [self setBackgroundColor:[UIColor clearColor]];
         
@@ -136,7 +153,8 @@
     
     for (int i=0; i<picker_choose_indexs.count; i++) {
         int index = [[picker_choose_indexs objectAtIndex:i] intValue];
-        [picker_view selectRow:index inComponent:i animated:YES];
+        NSArray *arr = [picker_array objectAtIndex:i];
+        [picker_view selectRow:index+(max_MoM/2)*arr.count inComponent:i animated:YES];
     }
     
     CGRect frame = show_view.frame;
@@ -216,6 +234,9 @@
     }
     
     NSArray *arr = [picker_array objectAtIndex:component];
+    if (is_loop) {
+        return arr.count*max_MoM;
+    }
     return arr.count;
 }
 
@@ -239,16 +260,34 @@
     retval.textColor = label_color;
     
     NSArray *arr = [picker_array objectAtIndex:component];
-    NSString *name = [arr objectAtIndex:row];
+    NSString *name;
+    if (is_loop) {
+        name = [arr objectAtIndex:(row%[arr count])];
+    }
+    else {
+        name = [arr objectAtIndex:row];
+    }
     
     [retval setText:name];
     
     return retval;
-    
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {//选择后操作
-    [picker_choose_indexs replaceObjectAtIndex:component withObject:[NSString stringWithFormat:@"%d",(int)row]];
+    if (is_loop) {
+        NSArray *arr = [picker_array objectAtIndex:component];
+        
+        NSUInteger max = 0;
+        NSUInteger base10 = 0;
+        max = [arr count]*max_MoM;
+        base10 = (max/2)-(max/2)%[arr count];
+        [pickerView selectRow:[pickerView selectedRowInComponent:component]%[arr count]+base10 inComponent:component animated:false];
+        
+        [picker_choose_indexs replaceObjectAtIndex:component withObject:[NSString stringWithFormat:@"%d",(int)(row%[arr count])]];
+    }
+    else {
+        [picker_choose_indexs replaceObjectAtIndex:component withObject:[NSString stringWithFormat:@"%d",(int)row]];
+    }
 }
 
 

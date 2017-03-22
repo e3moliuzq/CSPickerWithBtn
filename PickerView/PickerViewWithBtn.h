@@ -15,6 +15,8 @@
     UIButton *cancel_btn;
     UIView *btn_menu;//btn_mode==1使用
     int btn_mode;
+    int max_MoM;
+    BOOL is_loop;
     UIColor *label_color;
     
     UIView *show_view;
@@ -37,9 +39,10 @@
  chooseIndexs：传入int转NSString的数组，决定每一项选择的row
  areaArray：传入数据，array中为数组，每个数组中皆为NSString，为每一项的内容
  btn_mode:为1是按钮在选择框上方样式，为0是按钮在选择框下方样式，默认为0
+ is_loop:是否显示选择循环效果
  */
 - (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs areaArray:(NSArray*)array;
-- (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs areaArray:(NSArray*)array btnMode:(int)btnMode;
+- (id)initWithFrame:(CGRect)frame chooseIndexs:(NSArray*)chooseIndexs areaArray:(NSArray*)array btnMode:(int)btnMode pickerloop:(BOOL)isloop;
 
 - (void)setCellBgColor:(UIColor*)color;//设定选择框的背景颜色
 - (void)setCellLabelColor:(UIColor*)color;//设定选项文字的颜色
